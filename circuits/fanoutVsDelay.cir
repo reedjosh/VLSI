@@ -1,0 +1,168 @@
+
+.include spiceModel90nm.spi
+
+************************************************************************************
+.subckt L12_wire_2 inout0 right left inout1 res=50 cg=0.02f cc=0.05f length = 100
+* goto: http://ptm.asu.edu/cgi-bin/interconnect/local.cgi to find appropriate
+* values for res, cg, and cc
+* length values are in microns
+r0 inout0 mid  'length*res*0.5'
+r1 mid inout1  'length*res*0.5'
+cg0 inout0 gnd 'length*cg'
+cg1 inout1 gnd 'length*cg'
+ccl mid left   'length*cc'
+ccr mid right  'length*cc'
+.ends L12_wire
+ *               left
+ *                |
+ *               ___
+ *     inout0    ___ mid   inout1
+ *      /         | /       /
+ *     o ---xxxx--o--xxxx--o
+ *     |          |        |
+ *    ___        ___      ___
+ *    ___        ___      ___
+ *     |          |        |
+ *    gnd       right     gnd
+************************************************************************************
+
+************************************************************************************
+.subckt L12_wire_1 inout0 right mid inout1 res=50 cg=0.02f cc=0.05f length = 100
+* goto: http://ptm.asu.edu/cgi-bin/interconnect/local.cgi to find appropriate
+* values for res, cg, and cc
+* length values are in microns
+r0 inout0 mid  'length*res*0.5'
+r1 mid inout1  'length*res*0.5'
+cg0 inout0 gnd 'length*cg'
+cg1 inout1 gnd 'length*cg'
+ccr mid right  'length*cc'
+.ends L12_wire
+ *
+ *     inout0       mid   inout1
+ *      /           /       /
+ *     o ---xxxx--o--xxxx--o
+ *     |          |        |
+ *    ___        ___      ___
+ *    ___        ___      ___
+ *     |          |        |
+ *    gnd       right     gnd
+************************************************************************************
+
+************************************************************************************
+* Mosfet Models
+************************************************************************************
+.SUBCKT NMOS d g s sz=5u
+MN d g s gnd n W='sz' L=Lwid
+.ENDS NMOS
+
+.SUBCKT PMOS d g s sz=10u
+MP d g s vdd p W='sz' L=Lwid
+.ENDS PMOS
+************************************************************************************
+
+************************************************************************************
+* Gate models
+************************************************************************************
+* total at input = N + P
+* to match drive of a P/N = beta inverter
+* N=2*W
+* P=beta*W
+* total=2*W+beta*W
+* fraction to NMOS=(2/beta+2)
+* fraction to PMOS=(beta/beta+2)
+************************************************************************************
+.subckt inv out inn sz=15u beta=2
+XPP out inn vdd PMOS sz='sz*(beta/(beta+1))'
+XNN out inn gnd NMOS sz='sz*(1/(beta+1))'
+.ENDS inv
+
+.subckt nand2 out in1 in0 sz=15u beta=2
+XP0 out in1 vdd PMOS sz='sz*(beta/(beta+2))'
+XP1 out in0 vdd PMOS sz='sz*(beta/(beta+2))'
+XN0 out in1 nn0 NMOS sz='sz*(2/(beta+2))'
+XN1 nn0 in0 gnd NMOS sz='sz*(2/(beta+2))'
+.ends nand2
+
+.subckt amp p2 p0 sz=15u beta=2
+X0 p1 p0 inv sz ='sz' beta='beta'
+X1 p2 p1 inv sz ='sz' beta='beta'
+.ENDS amp
+************************************************************************************
+
+.subckt dut out inn sz=10u beta=2
+*place device under test(dut) in here, expose one input, tie others to desired potential
+
+* delay of nand gate through input with NMOS transistor whose drain is connected to output
+xdut out inn vdd nand2 sz='sz' beta='beta'
+
+* delay of nand gate through input with NMOS transistor whose source is connected to ground
+*xdut out vdd inn  nand2 sz='sz' beta='beta'
+
+* delay of inverter
+*xdut out inn inv sz='sz' beta='beta'
+
+*delay of inverter with wire model
+Xinv www inn inv sz='sz' beta='beta'
+Xwwm out gnd vdd www L12_wire_2 res=50 cg=0.02f cc=0.05f lenght =100
+.ends dut
+
+.subckt findDelay n4 n2 invSz=10u beta=2 multip=1
+.ic v(n0) 0
+.ic v(n2) 0
+* 5 inv ring
+Xt0 n1 n0 dut sz='invSz' beta='beta'
+Xt1 n2 n1 dut sz='invSz' beta='beta'
+Xt2 n3 n2 dut sz='invSz' beta='beta'
+Xt3 n4 n3 dut sz='invSz' beta='beta'
+Xt4 n0 n4 dut sz='invSz' beta='beta'
+
+* 5 nand2 ring
+Xl0 p0 n0 dut sz='multip*invSz' beta='beta'
+Xl1 p1 n1 dut sz='multip*invSz' beta='beta'
+Xl2 p2 n2 dut sz='multip*invSz' beta='beta'
+Xl3 p3 n3 dut sz='multip*invSz' beta='beta'
+Xl4 p4 n4 dut sz='multip*invSz' beta='beta'
+.ends findDelay
+
+************************************************************************************
+* actual circuit
+************************************************************************************
+.global gnd vdd
+
+* Parameters
+.param gnd=0
+.param sup=1
+.param Lwid=0.08u
+.param invSz=150u
+.param pinvSz=450u
+.param beta=1
+.param multip=1
+
+vdd vdd gnd 'sup'
+
+xr0 t1 t0 findDelay invSz='invSz' beta='beta' multip='multip'
+
+.tran 5p 12n
+.step param multip 1 8 1
+.meas ivdd 
++  find i(vdd) at=2.8n
+.meas dlayInv 
++  trig v(t0) val=0.6 rise=1 
++  targ v(t1) val=0.6 rise=1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

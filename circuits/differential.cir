@@ -1,0 +1,134 @@
+.include spiceModel90nm.spi
+
+.subckt L12_wire_1 inout0 right mid inout1 res=50 cg=0.02f cc=0.05f length = 100
+* goto: http://ptm.asu.edu/cgi-bin/interconnect/local.cgi to find appropriate
+* values for res, cg, and cc
+* length values are in microns
+r0 inout0 mid  'length*res*0.5'
+r1 mid inout1  'length*res*0.5'
+cg0 inout0 gnd 'length*cg'
+cg1 inout1 gnd 'length*cg'
+ccr mid right  'length*cc'
+.ends L12_wire
+
+ *
+ *     inout0       mid   inout1
+ *      /           /       /
+ *     o ---xxxx--o--xxxx--o
+ *     |          |        |
+ *    ___        ___      ___
+ *    ___        ___      ___
+ *     |          |        |
+ *    gnd       right     gnd
+
+.subckt L12_wire_2 inout0 right left inout1 res=50 cg=0.02f cc=0.05f length = 100
+* goto: http://ptm.asu.edu/cgi-bin/interconnect/local.cgi to find appropriate
+* values for res, cg, and cc
+* length values are in microns
+r0 inout0 mid  'length*res*0.5'
+r1 mid inout1  'length*res*0.5'
+cg0 inout0 gnd 'length*cg'
+cg1 inout1 gnd 'length*cg'
+ccl mid left   'length*cc'
+ccr mid right  'length*cc'
+.ends L12_wire
+
+ *               left
+ *                |
+ *               ___
+ *     inout0    ___ mid   inout1
+ *      /         | /       /
+ *     o ---xxxx--o--xxxx--o
+ *     |          |        |
+ *    ___        ___      ___
+ *    ___        ___      ___
+ *     |          |        |
+ *    gnd       right     gnd
+
+.SUBCKT NMOS d g s sz=5u
+MN d g s gnd n W='sz' L=Lwid
+.ENDS NMOS
+
+.SUBCKT PMOS d g s sz=10u
+MP d g s vdd p W='sz' L=Lwid
+.ENDS PMOS
+
+.subckt inv out inn size=15u bb=2
+XPP out inn vdd PMOS sz='size*(bb/(bb+1))'
+XNN out inn gnd NMOS sz='size*(1/(bb+1))'
+.ENDS inv
+
+* total at input = N + P
+* to match drive of a P/N = beta inverter
+* N = 2 * W
+* P = beta *W
+*total = 2*W + beta*W
+* fraction to NMOS = (2/beta+2)
+*fraction to PMOS = (beta/ beta+2)
+
+.subckt nand2 out in1 in0 size=15u beta=2
+XP0 out in1 vdd PMOS sz='size*(beta/(beta+2))'
+XP1 out in0 vdd PMOS sz='size*(beta/(beta+2))'
+XN0 out in1 nn0 NMOS sz='size*(2/(beta+2))'
+XN1 nn0 in0 gnd NMOS sz='size*(2/(beta+2))'
+.ends nand2
+
+.subckt amp p2 p0 size=15u bb=2
+X0 p1 p0 inv size = 'size' beta = 'beta'
+X1 p2 p1 inv size = 'size' beta = 'beta'
+.ENDS amp
+
+
+
+.subckt dutDiff out ouf int inf size = 10u beta=2
+Xint wwt int inv size = 'size' bb = 'beta'
+Xinf wwf inf inv size = 'size' bb = 'beta'
+Xwwt out 0 cc0 wwt L12_wire_2 res=50 cg=0.02f cc=0.05f length=100
+Xwwf ouf 0 cc0 wwf L12_wire_1 res=50 cg=0.02f cc=0.05f length=100
+.ends dutDiff
+
+
+.subckt findDelayDiff n4 n2
+.ic v(n0) 0
+.ic v(n2) 0
+.ic v(p0) 1
+.ic v(p2) 1
+
+Xt0 p1 n1 p0 n0 dutDiff size = 'invSize' bb = 'beta'
+Xt1 p2 n2 p1 n1 dutDiff size = 'invSize' bb = 'beta'
+Xt2 p3 n3 p2 n2 dutDiff size = 'invSize' bb = 'beta'
+Xt3 p4 n4 p3 n3 dutDiff size = 'invSize' bb = 'beta'
+Xt4 p0 n0 p4 n4 dutDiff size = 'invSize' bb = 'beta'
+.ends findDelayDiff
+
+
+.global gnd vdd
+
+* Parameters
+.param gnd=0
+.param sup=1
+.param Lwid=0.08u
+
+*supplies
+*DC supplies
+vdd vdd gnd 'sup'
+* Pulse supplies node+ node- type vhi vlo td rt ft timeatHI period
+*VPulse@1 in gnd pulse '0.4*sup' '0.8*sup' '4ns' '200ps' '200ps' 120ns 240ns
+
+
+.param invSize = 150u
+.param pinvSize =450u
+.param beta =1
+.param multip=1
+
+
+xr0 t1 t0 findDelayDiff invSize = 'invSize' beta = 'beta' multip = 'multip'
+
+.tran 5p 12n
+.meas dlayInv trig v(t0) val=0.6   rise =1 targ v(t1) val=0.6   rise =1
+* Look at end of fanoutVsDelay.log to see results
+
+
+
+
+

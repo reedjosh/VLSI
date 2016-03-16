@@ -1,0 +1,184 @@
+*ADDER PROJECT CIR FILE*
+************************
+
+*Transistor models are located here:
+.include transistorModels.spi
+
+.PARAM lmulti=2
+.PARAM wmultin=12
+.param wmultip=18
+
+****************begin:Subcircuits:***************************
+
+*Defined NMOS
+.SUBCKT NMOS d g s sz=40n
+MN d g s gnd nn W='wmultin*sz' L=.08u
+.ENDS NMOS
+
+*Defined PMOS
+.SUBCKT PMOS d g s sz=40n
+MP d g s vdd pp W='wmultip*sz' L=.08u
+.ENDS PMOS
+
+*Inverter
+.subckt inv out inn size=40n beta=1.5
+XPP out inn vdd PMOS W='wmultip*size*(beta/(beta+1))'
+XNN out inn gnd NMOS W='wmultin*size*(1/(beta+1))'
+.ENDS inv
+
+*NAND 2-Input
+.subckt nand2 out in1 in0 size=40n beta=1.5
+XP0 out in1 vdd PMOS W='wmultip*size*(beta/(beta+1))'
+XP1 out in0 vdd PMOS W='wmultip*size*(beta/(beta+1))'
+XN0 out in1 nn0 NMOS W='wmultin*size*(1/(beta+1))'
+XN1 nn0 in0 gnd NMOS W='wmultin*size*(1/(beta+1))'
+.ends nand2
+
+*XOR 2-Input
+.subckt xor2 out a b sz=40n
+XINV1 anot a inv
+XINV2 bnot b inv
+XPMOS1 pp0 anot vdd PMOS W='sz*36'
+XPMOS2 out b pp0 PMOS W='sz*36'
+XPMOS3 pp1 bnot vdd PMOS W='sz*36'
+XPMOS4 out a pp1 PMOS W='sz*36'
+XNMOS1 out a nn0 NMOS W='sz*24'
+XNMOS2 nn0 b gnd NMOS W='sz*24'
+XNMOS3 out anot nn1 NMOS W='sz*24'
+XNMOS4 nn1 bnot gnd NMOS W='sz*24'
+.ends xor2
+
+*Full Adder
+.subckt fadd sum cout in1 in0 cin
+XOR1 out1 in1 in0 xor2
+XOR2 sum out1 cin xor2
+XAN1 out2 out1 cin nand2
+XAN2 out3 in0 in1 nand2
+XAN3 cout out2 out3 nand2
+.ends fadd
+
+*Full 4-bit Adder
+.subckt 4bitadd sum1 sum2 sum3 sum4 in1a in2a in3a in4a in1b in2b in3b in4b cout
+XADD1 sum1 co1 in1a in1b gnd fadd
+XADD2 sum2 co2 in2a in2b co1 fadd
+XADD3 sum3 co3 in3a in3b co2 fadd
+XADD4 sum4 cout in4a in4b co3 fadd
+.ends 4bitadd
+
+*Passgate
+.subckt passg pclk nclk io oi
+XNMOS oi pclk io NMOS
+XPMOS io nclk oi PMOS
+.ends passg
+
+*CMOS D Type Positive Edge Triggered Master Slave Flip-flop
+.subckt CMOSFF D Clock Q NQ
+XINV1 nd1 Clock inv
+XINV2 nd2 nd1 inv
+XINV3 nd3 nd1 inv
+XINV4 nd4 nd3 inv
+XPASSP1 nd2 nd4 D nd5 passg
+XPASS1 nd4 nd2 nd6 nd5 passg
+XINV5 nd7 nd5 inv
+XINV6 nd6 nd7 inv
+XPASS2 nd4 nd2 nd8 nd7 passg
+XPASSP2 nd2 nd4 nd8 NQ passg
+XINV7 Q nd8 inv
+XINV8 NQ Q inv
+.end CMOSFF
+
+*** SUBCIRCUIT FBFLop
+.subckt FBFlop din dot clk
+xinv   clk_b  clk  inv
+XFBL1  din inter clk_b FBLatch
+XFBL2  inter dot clk FBLatch
+.ends FBLatch
+
+*** SUBCIRCUIT Flop Array
+.subckt FlopArr in0 in1 in2 in3 o0 o1 o2 o3 clk
+XFBFlop0 in0 o0 clk FBFlop
+XFBFlop1 in1 o1 clk FBFlop
+XFBFlop2 in2 o2 clk FBFlop
+XFBFlop3 in3 o3 clk FBFlop
+.ends FBLatch
+
+*** SUBCIRCUIT FBLatch
+.subckt FBLatch din dot clk size=15u beta=2 logical_size=1
+Xinv   n1   din inv logical_size='logical_size'
+Xkpr   dot  kpr
+*      d    g     s    type
+Xpm1   n4   din   vdd  PMOS sz='logical_size*size*1*beta/(beta+2)'
+Xpm2   dot  n4    vdd  PMOS sz='logical_size*size*3*beta/(beta+2)'
+Xnm1   n4   din   n3   NMOS sz='logical_size*size*1/(beta+2)'
+Xnm2   dot  n1    n3   NMOS sz='logical_size*size*6/(beta+2)'
+Xnm3   n3   clk   gnd  NMOS sz='logical_size*size*6/(beta+2)'
+.ends FBLatch
+
+*** SUBCIRCUIT kpr
+.SUBCKT kpr keep sz=15u beta=2 logical_size=1
+Xinv1  n1   keep  inv
+*      d    g     s    type
+XPMOS1 n2   gnd   vdd  PMOS  sz='logical_size*size*1*beta/(beta+2)'
+XPMOS2 keep n1    n2   PMOS  sz='logical_size*size*1*beta/(beta+2)'
+XNMOS1 keep n1    n3   NMOS  sz='logical_size*size*1/(beta+2)'
+XNMOS2 n3   vdd   gnd  NMOS  sz='logical_size*size*1/(beta+2)'
+.ENDS kpr
+
+
+****************end:Subcircuits:***************************
+
+
+.global gnd vdd
+
+
+********begin: parameters
+.param gnd=0
+.param sup=1
+.param size =.40n
+.param beta =1.5
+.param period = 20ns
+********end: parameters
+
+
+*******begin: supplies
+*power:
+vdd vdd gnd 'sup'
+
+* we'll uses pulse sources to simulate data changing at the input
+* of the ripple adder, four pulse sources for each input word.
+
+*Pulse source format:
+* V<name> v+ v- PULSE(vstart vend delay riseTime fallTime width period
+*First input to adder
+Va0 a0 gnd PULSE(0 1 50ps 10p 10p '0.5*period' 'period')
+Va1 a1 gnd PULSE(0 1 50p 10p 10p '0.5*period' 'period')
+Va2 a2 gnd PULSE(0 1 50p 10p 10p '0.5*period' 'period')
+Va3 a3 gnd PULSE(0 1 50p 10p 10p '0.5*period' 'period')
+
+* Second input to adder
+Vb0 b0 gnd PULSE(0 1 50p 10p 10p '0.5*period' 'period')
+Vb1 b1 gnd PULSE(0 0 50p 10p 10p '0.5*period' 'period')
+Vb2 b2 gnd PULSE(0 0 50p 10p 10p '0.5*period' 'period')
+Vb3 b3 gnd PULSE(0 0 50p 10p 10p '0.5*period' 'period')
+
+*4bitadd sum1 sum2 sum3 sum4 in1a in2a in3a in4a in1b in2b in3b in4b cout
+X3 s1 s2 s3 s4 a0 a1 a2 a3 b0 b1 b2 b3 cout 4bitadd size='size' beta ='beta'
+
+*.subckt CMOSFF D Clock Q NQ
+VCLK	clk1 	gnd 	PULSE(1 0 20p 10p 10p '.5*period' 'period')
+VD		d1 		gnd		PULSE(0 1 20p 20p 20p '.65*period' '1.1*period')
+
+X4 d1 clk1 out nout CMOSFF
+
+.tran 5p '2*period'
+* use this call to step parameters
+*.step param period 0.5 3 0.25
+
+* measurement statements can be used to have spice measure various values,
+* results are placed in a log file
+
+.meas ivdd find i(vdd) at=2.8n
+.meas tran testsum trig v(cout) at=3ns val=.55 cross=1 targ v(cout) td=30ns val='.5' cross=1
+.MEASURE tran length TRIG v(cout) VAL = .5 TD = 3ns RISE = 1
++ TARGv(neq) VAL = .5 TD = 3ns RISE = 1
+

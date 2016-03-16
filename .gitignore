@@ -1,0 +1,10 @@
+# literature
+*.pdf
+
+# electric VLSI files
+*.jar
+
+# generated files
+*.log
+*.raw
+*.out
