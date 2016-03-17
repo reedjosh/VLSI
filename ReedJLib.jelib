@@ -9,8 +9,43 @@ Vschematic|sch
 # Technologies:
 Tmocmos|mocmosNumberOfMetalLayers()I3|mocmosSecondPolysilicon()BF
 
+# Cell 4BAddr;1{lay}
+C4BAddr;1{lay}||mocmos|1458253062266|1458257203579||ATTR_NCC(D5FEnvy Code R;G2;NTX141;Y-28;)S["exportsConnectedByParent vdd /vdd_[0-9]+/","exportsConnectedByParent gnd /gnd_[0-9]+/"]|DRC_last_good_drc_area_date()G1458257853969|DRC_last_good_drc_bit()I18|DRC_last_good_drc_date()G1458257853969
+IAdd;1{lay}|Add@0||0.75|68.5|||D5FEnvy Code R;G1.5;
+IAdd;1{lay}|Add@1||0.75|-125.5|||D5FEnvy Code R;G1.5;
+IAddFlipped;1{lay}|AddFlipp@0||0|-28.25|||D5FEnvy Code R;G1.5;
+IAddFlipped;1{lay}|AddFlipp@1||0|-222.25|||D5FEnvy Code R;G1.5;
+Ngeneric:Facet-Center|art@0||0|0||||AV
+Ngeneric:Invisible-Pin|pin@3||179.25|-55|||||ART_message(D5FEnvy Code R;G1;)Stext
+AMetal-1|net@1||1|S2700|Add@1|Cin|40.5|-80.75|AddFlipp@0|Cout|40.5|-73.25
+AMetal-1|net@9||1|S2700|AddFlipp@0|Cin|40.5|18.25|Add@0|Cout|40.5|24.25
+AMetal-1|net@10||1|S2700|AddFlipp@1|Cin|40.5|-175.75|Add@1|Cout|40.5|-169.75
+EA_0||D5FEnvy Code R;G1;|Add@0|A|I
+EA_1||D5FEnvy Code R;G1;|AddFlipp@0|A|I
+EA_2||D5FEnvy Code R;G1;|Add@1|A|I
+EA_3||D5FEnvy Code R;G1;|AddFlipp@1|A|I
+EB_0||D5FEnvy Code R;G1;|Add@0|B|I
+EB_1||D5FEnvy Code R;G1;|AddFlipp@0|B|I
+EB_2||D5FEnvy Code R;G1;|Add@1|B|I
+EB_3||D5FEnvy Code R;G1;|AddFlipp@1|B|I
+ECin||D5FEnvy Code R;G1;|Add@0|Cin|I
+ECout||D5FEnvy Code R;G1;|AddFlipp@1|Cout|O
+ES_0||D5FEnvy Code R;G1;|Add@0|S|O
+ES_1||D5FEnvy Code R;G1;|AddFlipp@0|S|O
+ES_2||D5FEnvy Code R;G1;|Add@1|S|O
+ES_3||D5FEnvy Code R;G1;|AddFlipp@1|S|O
+Egnd||D5FEnvy Code R;G1;|Add@1|gnd|G
+Egnd_1||D5FEnvy Code R;G1;|Add@0|gnd|G
+Egnd_2||D5FEnvy Code R;G1.5;|AddFlipp@0|gnd|G
+Egnd_3||D5FEnvy Code R;G1.5;|AddFlipp@1|gnd|G
+Evdd||D5FEnvy Code R;G1.5;|Add@0|vdd|P
+Evdd_1||D5FEnvy Code R;G1.5;|AddFlipp@1|vdd|P
+Evdd_2||D5FEnvy Code R;G1.5;|Add@1|vdd|P
+Evdd_3||D5FEnvy Code R;G1.5;|AddFlipp@0|vdd|P
+X
+
 # Cell 4BAddr;2{sch}
-C4BAddr;2{sch}||schematic|1458250511209|1458251300265|
+C4BAddr;2{sch}||schematic|1458250511209|1458253962201||ATTR_NCC(D5FEnvy Code R;G1;NTX23.25;Y5.25;)S["exportsConnectedByParent gnd /gnd_[0-9]+/"]
 IAdd;1{ic}|Add@2||0|11.25|||D5FEnvy Code R;G1.5;
 IAdd;1{ic}|Add@3||0|1.75|||D5FEnvy Code R;G1.5;
 IAddFlipped;1{ic}|AddFlipp@2||0|-3|||D5FEnvy Code R;G1.5;
@@ -55,7 +90,7 @@ EB_0||D5FEnvy Code R;G1;X-2.75;|conn@1|y|I
 EB_1||D5FEnvy Code R;G1;X-2.75;|conn@3|y|I
 EB_2||D5FEnvy Code R;G1;X1.25;|conn@5|a|I
 EB_3||D5FEnvy Code R;G1;X1.25;|conn@7|a|I
-ECin||D5FEnvy Code R;G1;|conn@8|a|I
+ECin||D5FEnvy Code R;G1;X1.25;|conn@8|a|I
 ECout||D5FEnvy Code R;G1;X-2.25;|conn@13|y|O
 ES_0||D5FEnvy Code R;G1;X-2;|conn@9|y|O
 ES_1||D5FEnvy Code R;G1;X-2;|conn@10|y|O
@@ -149,7 +184,7 @@ ES||D5FEnvy Code R;G0.75;X0.25;|pin@8||O
 X
 
 # Cell Add;1{lay}
-CAdd;1{lay}||mocmos|1458246173616|1458247919633||DRC_last_good_drc_area_date()G1458247920181|DRC_last_good_drc_bit()I18|DRC_last_good_drc_date()G1458247920181
+CAdd;1{lay}||mocmos|1458246173616|1458256654802||DRC_last_good_drc_area_date()G1458256656346|DRC_last_good_drc_bit()I18|DRC_last_good_drc_date()G1458256656346
 Ngeneric:Facet-Center|art@0||0|0||||AV
 NMetal-1-Metal-2-Con|contact@0||-69.5|-7.75||||
 NMetal-1-Metal-2-Con|contact@1||97.75|-7.75||||
@@ -171,7 +206,7 @@ Inand2;1{lay}|nand2@0||0|0|||D5FEnvy Code R;G1.5;
 Inand2;1{lay}|nand2@1||-24.25|0|||D5FEnvy Code R;G1.5;
 Inand2;1{lay}|nand2@2||24.25|0|||D5FEnvy Code R;G1.5;
 NMetal-1-Pin|pin@0||39.75|44.75||||
-NMetal-1-Pin|pin@3||39.75|-45.25||||
+NMetal-1-Pin|pin@1||39.75|-44.25||||
 NN-Select-Node|plnode@19||-58.125|-40|89.75|14||A
 NN-Select-Node|plnode@20||0|-40|22|14||A
 NN-Select-Node|plnode@21||58|-40|89.5|14||A
@@ -182,14 +217,9 @@ Ixor;1{lay}|xor@0||-69.5|0|||D5FEnvy Code R;G1.5;
 Ixor;1{lay}|xor@1||75.75|0|||D5FEnvy Code R;G1.5;
 AMetal-2|net@0||7|S0|nand2@2|vdd|15|40|nand2@0|vdd|8.75|40
 AMetal-2|net@1||7|S1800|nand2@1|vdd|-15.5|40|nand2@0|vdd|-9.25|40
-AMetal-2|net@2||7|S1800|nand2@1|gnd|-14.75|-40|nand2@0|gnd|-9|-40
-AMetal-2|net@3||7|S1800|nand2@0|gnd|9.5|-40|nand2@2|gnd|15.25|-40
 AMetal-2|net@4||7|S0|xor@1|vdd|49.75|40|nand2@2|vdd|33|40
-AMetal-2|net@5||7|S1800|nand2@2|gnd|33.75|-40|xor@1|gnd|49.75|-40
 AMetal-2|net@6||7|S1800|xor@0|vdd|-39.75|40|nand2@1|vdd|-33.5|40
-AMetal-2|net@7||7|S1800|xor@0|gnd|-39.75|-40|nand2@1|gnd|-33.25|-40
 AMetal-1|net@8||1|S900|pin@0||39.75|44.75|contact@7||39.75|12.5
-AMetal-1|net@9||1|S900|contact@4||39.75|-30|pin@3||39.75|-45.25
 AMetal-1|net@11||1|S|xor@0|Y|-69.5|-7.75|contact@0||-69.5|-7.75
 AMetal-1|net@12||1|S|xor@1|B|97.75|-7.75|contact@1||97.75|-7.75
 AMetal-2|net@17||1|S0|contact@4||39.75|-30|contact@5||32.75|-30
@@ -213,10 +243,15 @@ AMetal-1|net@35||1|S|nand2@2|B|25.75|-14.75|contact@15||25.75|-14.75
 AMetal-2|net@36||1|S1800|contact@16||8.5|30|contact@17||17.25|30
 AMetal-1|net@37||1|S|nand2@0|Y|8.5|30|contact@16||8.5|30
 AMetal-1|net@38||1|S|nand2@2|A|17.25|30|contact@17||17.25|30
+AMetal-2|net@50||7|S0|xor@1|gnd|47.25|-40|nand2@2|gnd|33.75|-40
+AMetal-2|net@51||7|S0|nand2@2|gnd|15.25|-40.25|nand2@0|gnd|9.5|-40.25
+AMetal-2|net@52||7|S1800|nand2@1|gnd|-14.75|-40|nand2@0|gnd|-9|-40
+AMetal-2|net@53||7|S0|nand2@1|gnd|-33.25|-40|xor@0|gnd|-41|-40
+AMetal-1|net@54||1|S2700|pin@1||39.75|-44.25|contact@4||39.75|-30
 EA||D5FEnvy Code R;G1.5;|xor@0|A|I
 EB||D5FEnvy Code R;G1.5;|xor@0|B|I
 ECin||D5FEnvy Code R;G1.5;|pin@0||I
-ECout||D5FEnvy Code R;G1.5;|pin@3||O
+ECout||D5FEnvy Code R;G1;|pin@1||O
 ES||D5FEnvy Code R;G1.5;|xor@1|Y|O
 Egnd||D5FEnvy Code R;G1.5;|xor@0|gnd|G
 Evdd||D5FEnvy Code R;G1.5;|xor@0|vdd|P
@@ -305,7 +340,7 @@ ECout|S|D5FEnvy Code R;G0.75;Y-0.25;|pin@6||I
 X
 
 # Cell AddFlipped;1{lay}
-CAddFlipped;1{lay}||mocmos|1458249302976|1458249852929||DRC_last_good_drc_area_date()G1458249732312|DRC_last_good_drc_bit()I18|DRC_last_good_drc_date()G1458249732312
+CAddFlipped;1{lay}||mocmos|1458249302976|1458256874686||DRC_last_good_drc_area_date()G1458249732312|DRC_last_good_drc_bit()I18|DRC_last_good_drc_date()G1458256878930
 Ngeneric:Facet-Center|art@0||0|0||||AV
 NMetal-1-Metal-2-Con|contact@0||-68.75|7.5|||Y|
 NMetal-1-Metal-2-Con|contact@1||98.5|7.5|||Y|
@@ -355,10 +390,8 @@ AMetal-2|net@17||1|S1800|contact@14||9.25|-30.25|contact@15||18|-30.25
 AMetal-1|net@18||1|S|nand2@0|Y|9.25|-30.25|contact@14||9.25|-30.25
 AMetal-1|net@19||1|S|nand2@2|A|18|-30.25|contact@15||18|-30.25
 AMetal-2|net@20||7|S0|xor@1|vdd|50.5|-40.25|nand2@2|vdd|33.75|-40.25
-AMetal-2|net@21||7|S1800|nand2@2|gnd|34.5|39.75|xor@1|gnd|50.5|39.75
 AMetal-2|net@22||7|S1800|xor@0|vdd|-39|-40.25|nand2@1|vdd|-32.75|-40.25
 AMetal-1|net@23||1|S|xor@1|B|98.5|7.5|contact@1||98.5|7.5
-AMetal-2|net@24||7|S1800|xor@0|gnd|-39|39.75|nand2@1|gnd|-32.5|39.75
 AMetal-1|net@25||1|S2700|pin@0||40.5|-45|contact@5||40.5|-30.5
 AMetal-1|net@26||1|S2700|contact@2||40.5|-11.75|pin@1||40.5|46.5
 AMetal-2|net@30||7|S1800|nand2@1|gnd|-14|39.75|nand2@0|gnd|-8.25|39.75
@@ -369,12 +402,14 @@ AMetal-1|net@34||1|S|nand2@2|Y|33.5|-30.25|contact@16||33.5|-30.25
 AMetal-2|net@35||1|S1800|contact@17||2.25|-12.75|contact@2||40.5|-12.75
 AMetal-2|net@36||1|S1800|contact@2||40.5|-12.75|contact@4||48.5|-12.75
 AMetal-1|net@37||1|S|nand2@0|B|2.25|-12.75|contact@17||2.25|-12.75
+AMetal-2|net@38||7|S1800|xor@0|gnd|-40.25|39.75|nand2@1|gnd|-32.5|39.75
+AMetal-2|net@39||7|S1800|nand2@2|gnd|34.5|39.75|xor@1|gnd|48|39.75
 EA||D5FEnvy Code R;G1.5;|xor@0|A|I
 EB||D5FEnvy Code R;G1.5;|xor@0|B|I
 ECin||D5FEnvy Code R;G1.5;|pin@1||I
 ECout||D5FEnvy Code R;G1.5;|pin@0||O
 ES||D5FEnvy Code R;G1.5;|xor@1|Y|O
-Egnd||D5FEnvy Code R;G1.5;|nand2@0|gnd|G
+Egnd||D5FEnvy Code R;G1.5;|xor@0|gnd|G
 Evdd||D5FEnvy Code R;G1.5;|nand2@0|vdd|P
 X
 
@@ -1206,7 +1241,7 @@ EY||D5FEnvy Code R;G0.5;X0.25;|pin@4||O
 X
 
 # Cell xor;1{lay}
-Cxor;1{lay}||mocmos|1455511371785|1458246248117||DRC_last_good_drc_area_date()G1458196900175|DRC_last_good_drc_bit()I18|DRC_last_good_drc_date()G1458246376756
+Cxor;1{lay}||mocmos|1455511371785|1458256033586||DRC_last_good_drc_area_date()G1458256035125|DRC_last_good_drc_bit()I18|DRC_last_good_drc_date()G1458256035125
 Iinv;1{lay}|A~|C86;D5G1;TX4;Y-25.75;|-28|0|||D5FEnvy Code R;G0.75;
 Iinv;1{lay}|B~|C86;D5G1;TX4;Y-25.75;|22|0|||D5FEnvy Code R;G0.75;
 Ngeneric:Facet-Center|art@2||0|0||||AV
@@ -1276,8 +1311,7 @@ NMetal-2-Pin|pin@136||-21|-21.75||||
 NMetal-2-Pin|pin@137||-21|-21.75||||
 NMetal-2-Pin|pin@138||0|40|60|7||
 NMetal-2-Pin|pin@139||-0.75|40||||
-NMetal-2-Pin|pin@140||0|-41.5|60|7||
-NMetal-2-Pin|pin@141||5.5|-40||||
+NMetal-2-Pin|pin@140||0|-40|57|5||
 NP-Transistor|pmos@14||-9|35|17||RRR|
 NP-Transistor|pmos@15||-4|35|17||RRR|
 NP-Transistor|pmos@16||4|35|17||RRR|
@@ -1322,13 +1356,10 @@ AMetal-1|net@841||-3|IJS|contact@102||-13|-40|contact@135||-13|-40
 AMetal-1|net@844||-3|IJS|contact@103||13|-40|contact@136||13|-40
 AMetal-1|net@847||-3|IJS|contact@97||13|40|contact@137||13|40
 AMetal-1|net@851||-3|IJS|contact@98||-13|40|contact@138||-13|40
-AMetal-2|net@862||-3|IJS|contact@135||-13|-40|contact@135||-13|-40
 AN-Active|net@878|||S0|contact@103||13|-40.25|nmos@17|diff-bottom|12.75|-40.25
 AN-Active|net@879|||S0|nmos@16|diff-bottom|7.75|-39.5|nmos@17|diff-top|5.25|-39.5
-AMetal-2|net@880||7|IS0|contact@135||-13|-40|A~|gnd|-21|-40
 AMetal-2|net@881||7|IS0|contact@138||-13|40|A~|vdd|-21|40
 AMetal-2|net@882||7|IS1800|contact@137||13|40|B~|vdd|20.5|40
-AMetal-2|net@883||7|IS1800|contact@136||13|-40|B~|gnd|20.5|-40
 AMetal-1|net@888||1|JS900|contact@96||0|33|contact@101||0|-42.25
 APolysilicon-1|net@889|||S2700|nmos@17|poly-right|9|-33|pin@124||9|-29.75
 APolysilicon-1|net@890|||S2700|pin@124||9|-29.75|pin@107||9|-28.25
@@ -1367,13 +1398,14 @@ AMetal-1|net@930||1|S1800|A~|A~|-21|-21.75|contact@153||-20.75|-21.75
 AMetal-2|net@931||7|S0|contact@137||13|40|pin@139||-0.75|40
 AMetal-2|net@932||7|S0|pin@139||-0.75|40|contact@138||-13|40
 AMetal-2|net@933||7|IJS2700|pin@139||-0.75|40|pin@138||-0.75|42.5
-AMetal-2|net@934||7|S0|contact@136||13|-40|pin@141||5.5|-40
-AMetal-2|net@935||7|S0|pin@141||5.5|-40|contact@135||-13|-40
-AMetal-2|net@936||7|IJS900|pin@141||5.5|-40|pin@140||5.5|-43.5
+AMetal-2|net@934||7|S0|B~|gnd|20|-40|contact@136||13|-40
+AMetal-2|net@935||7|S0|contact@136||13|-40|contact@135||-13|-40
+AMetal-2|net@936||7|S0|contact@135||-13|-40|A~|gnd|-20|-40
+AMetal-2|net@937||1|S|pin@140||-28.5|-38.75|A~|gnd|-28.5|-38.75
 EA||D5FEnvy Code R;G1.5;Y1.25;|A~|A|I
 EB||D5FEnvy Code R;G1.5;Y1;|B~|A|I
 EY||D5FEnvy Code R;G1.5;Y-1.75;|pin@134||O
-Egnd||D5FEnvy Code R;G1;Y-1.5;|pin@140||G
+Egnd||D5FEnvy Code R;G1;|pin@140||G
 Evdd||D5FEnvy Code R;G1;|pin@138||P
 X
 
